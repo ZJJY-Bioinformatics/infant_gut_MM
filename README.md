@@ -24,7 +24,8 @@ This repository includes the following key analysis scripts:
 - **cluster_trend**: Cluster analysis to identify trends in microbiota maturation across cohorts.
 - **slow_fast_sepsis_ab**: Analysis of microbiota composition in relation to slow vs. fast microbiota maturation and sepsis risk.
 - **mediation_analysis**: Mediation analysis exploring the causal relationship between antibiotic exposure, microbiota maturity, and sepsis incidence.
-- **Poilt_metagenome**: Metagenomic data analysis pipeline, including quality control, assembly, and annotation.
+- **Poilt_metagenome**: data analysis pipeline for the clinical intervention.
+- **wet_valid**: Display and analysis of animal experiment data to validate findings from human cohorts.
 
 ## Purpose of the Analysis
 
