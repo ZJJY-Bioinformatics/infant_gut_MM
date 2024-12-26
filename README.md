@@ -4,13 +4,6 @@
 
 This repository contains the code and data analysis for a study investigating the role of gut microbiota maturation in preterm infants and its relationship with late-onset sepsis (LOS). Our findings suggest that antibiotic exposure disrupts microbiota development, leading to a deficiency in bacterial enzymes such as DL-endopeptidase, which are important for the activation of the host’s immune system. Specifically, we identify a deficiency in DL-endopeptidase-producing *Enterococcus faecium* as a key factor in delayed microbiota maturation and increased LOS risk. The analysis tools in this repository allow for the exploration of microbiota development, NOD2 activation, and the effect of antibiotics on microbiota composition in preterm infants.
 
-## Objectives
-
-- **Identify microbial features** that correlate with sepsis risk in preterm infants.
-- **Quantify bacterial enzymes** (e.g., DL-endopeptidase) involved in immune system activation via NOD2.
-- **Develop predictive models** for microbiota maturation trajectory and its potential use in predicting LOS.
-- **Assess the effect of antibiotic exposure** on gut microbiota and its subsequent impact on infant health outcomes.
-
 ## Code Structure
 
 This repository includes the following key analysis scripts:
@@ -41,6 +34,6 @@ The goal of these analyses is to:
 Clone this repository to your local machine:
    ```bash
    git clone https://github.com/ZJJY-Bioinformatics/infant_gut_MM.git
-   ···
+   ```
 
 
