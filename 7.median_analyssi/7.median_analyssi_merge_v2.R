@@ -1,20 +1,23 @@
-xbox::chdir("../7.median_analyssi")
+xbox::chdir("./7.median_analyssi")
 rm(list = ls())
-source("../addin.r")
 
+# 先整理数据
+# 合并队列 1 和队列 2 的数据---------------
+# 队列2的数据-----------------
 set.seed(123)
 rm(list = ls())
 require(tidyverse)
+require(ggstatsplot)
 
-c2_m = read.csv("../8.antibio_days_or/Antibiotics_fix_days.csv",row.names = 1) %>% distinct()
+data_s = read.csv("../18.caoshi_diff/caoshi_antibio_data.csv",row.names = 1)
+m = data_s
 
-# 开始分析
-m = c2_m
-m$Sepsis_style = factor(m$Sepsis_style,levels = c("N","LOS"))
-m$Sepsis_style = as.numeric(m$Sepsis_style)
+m$anti_time = factor(m$anti_time,levels = c("short","long"))
+m$anti_time = as.numeric(m$anti_time)
+m$anti_sepsis = factor(m$anti_sepsis,levels  = c("N","LOS"))
+m$anti_sepsis = as.numeric(m$anti_sepsis)
 m$type = factor(m$type,levels = c("fast","slow"))
 m$type = as.numeric(m$type)
-
 
 #中介分析主体
 require(tidyverse)
@@ -26,9 +29,9 @@ library(broom.mixed)
 # 从这里开始循环-------
 medi_result = data.frame()
 
-iv_fct_name = "Antibiotics_Duration_2w_fix"
-mv_fct_name = "slope"
-dv_fct_name = "Sepsis_style"
+iv_fct_name = "anti_time"
+mv_fct_name = "type"
+dv_fct_name = "anti_sepsis"
 
 cor_iv_mv = cor.test(m[[iv_fct_name]],m[[mv_fct_name]],method = "spearman")[["estimate"]][["rho"]]
 p_iv_mv = cor.test(m[[iv_fct_name]],m[[mv_fct_name]],method = "spearman")[["p.value"]]
@@ -56,47 +59,8 @@ set.seed("20240131")
 fitM = lm(as.formula(paste(mv,"~",iv)), data = mData)
 fitY <- lm(as.formula(paste(dv,"~",iv,"+",mv)), data=mData)
 
-
+set.seed(2024)
 fitMedBoot <- mediate(fitM, fitY, boot=TRUE, sims=999, treat=iv, mediator=mv)
 summary(fitMedBoot)-> summ_fit
 summ_fit
-
-fit1 = lm(as.formula(paste(mv,"~",dv)), data = mData)
-fit2 = lm(as.formula(paste(iv,"~",mv)), data = mData)
-fit3 = lm(as.formula(paste(iv,"~",dv)), data = mData)
-
-i = 1
-medi_result[i,1] = summ_fit[["d.avg.p"]]
-medi_result[i,2] = summ_fit[["d.avg"]] 
-medi_result[i,3] = summ_fit[["d.avg.ci"]][1]
-medi_result[i,4] = summ_fit[["d.avg.ci"]][2]
-medi_result[i,5] = summ_fit[["z.avg.p"]]
-medi_result[i,6] = summ_fit[["z.avg"]]
-medi_result[i,7] = summ_fit[["z.avg.ci"]][1]
-medi_result[i,8] = summ_fit[["z.avg.ci"]][2]
-medi_result[i,9] = iv
-medi_result[i,10] = mv
-medi_result[i,11] = dv
-medi_result[i,12] = cor_iv_mv
-medi_result[i,13] = p_iv_mv
-medi_result[i,14] = cor_mv_dv
-medi_result[i,15] = p_mv_dv
-
-colnames(medi_result) = c("ACME_p",
-                          "ACME_beta",
-                          "ACME_beta_CI_lower",
-                          "ACME_beta_CI_upper",
-                          "ADE_p","ADE_beta",
-                          "ADE_beta_CI_lower",
-                          "ADE_beta_CI_upper",
-                          "iv",
-                          "mv",
-                          "dv",
-                          "cor_iv_mv",
-                          "p_iv_mv",
-                          "cor_mv_dv",
-                          "p_mv_dv")
-
-medi_result_cis = medi_result
-
-write_csv(medi_result_cis,paste0("medi_result_trans_",iv,"_-",mv,"_-",dv,".csv"))
+saveRDS(summ_fit,"mediate_result_2024.rds")
