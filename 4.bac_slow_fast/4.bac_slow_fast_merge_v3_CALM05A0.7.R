@@ -175,9 +175,6 @@ ggplot(best_tuned_pred %>%
   labs(x = "Age_DOL", y = "MA")
 ggsave("robert_line_patient.pdf",width = 4,height = 3)
 
-colpal = readRDS("../colpal.rds")
-colpal = c(c("Robert_2024_M" = "#E0B794"),colpal)
-
 ggplot(best_tuned_pred %>%
          filter(!cohort  %in% c("CALM2005_2_A",
                                 "Brooks_2017_M",
@@ -249,26 +246,6 @@ best_tuned_pred$cohort = factor(best_tuned_pred$cohort,
                                 levels = c("CALM2005_Test", "CALM2005_Train", "CALM2005_1_A", "Rao_2021_A", "Lauren_2022_M", "Robert_2024_M", "Brooks_2017_M", "Olm_2019_M", "Raveh_2015_M")
                                 
 )
-
-ggplot(best_tuned_pred %>%
-         filter(!cohort  %in% c(
-           "CALM2005_2_A",
-           "Brooks_2017_M",
-           "Olm_2019_M",
-           "Raveh_2015_M")),aes(x = truth, y = response))+
-  geom_point(aes(fill = cohort),alpha = 1,size = 3,color = "white",shape = 21,show.legend = F)+
-  geom_smooth(method = 'lm',formula = y~x,color = "#5d4990",se = T)+
-  # stat_poly_eq(
-  #   aes(label =  paste(..eq.label..,..rr.label..,..p.value.label.., sep = "~~~~")),
-  #   formula = y~x, parse = TRUE,position = "identity",
-  #   label.x.npc = 0.1)+
-  coord_cartesian(ylim = c(8,30))+
-  scale_fill_manual(values = colpal)+
-  facet_wrap(".~cohort",nrow = 2,scales = "free_y")+
-  ggthemes::theme_clean()+
-  theme(panel.grid.major.y = element_blank())+
-  labs(x = "Age DOL", y = "Predict Age(Days)")
-ggsave("split_cohort_predict_model_3x2.pdf",width = 9,height = 5.6)
 
 
 results <- best_tuned_pred %>%
